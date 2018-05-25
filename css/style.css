@@ -1,3 +1,35 @@
 body {
     text-align: center;
 }
+
+.lives,.scores{
+	position: absolute;
+	top: 25px;
+	left: 830px;
+	font-weight: bold;
+	font-size: 25px;
+}
+
+.scores{
+	left: 450px;
+}
+
+.won,.lose{
+	position: absolute;
+	color: green;
+	z-index: -1;
+	top: 200px;
+	left: 500px;
+	font-size: 85px;
+	visibility: hidden;
+}
+
+.lose{
+	color: red;
+	font-size: 55px;
+}
+
+.won.vi{
+	visibility: visible;
+	z-index: 1;
+}
