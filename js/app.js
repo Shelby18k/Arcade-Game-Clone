@@ -1,3 +1,4 @@
+"use strict;"
 // Enemies our player must avoid
 var Enemy = function(x,y,speed) {
     // Variables applied to each of our instances go here,
@@ -9,7 +10,6 @@ var Enemy = function(x,y,speed) {
     this.x = x;
     this.y = y;
     this.speed = speed;
-
     this.height = 50;
     this.width = 80;
 };
@@ -27,7 +27,6 @@ Enemy.prototype.update = function(dt) {
     }
 
     this.resetSpeed();
-    this.checkCollision();
 };
 
 // Draw the enemy on the screen, required method for game
@@ -39,37 +38,20 @@ Enemy.prototype.render = function() {
 Enemy.prototype.resetSpeed = function(){
     this.speed = Math.floor(Math.random() * 501);
 }
-// Function to check collision of the bugs and player
-Enemy.prototype.checkCollision = function(){
-    if(player.x < this.x + this.width &&
-        player.x + player.width > this.x &&
-        player.y < this.y + this.height &&
-        (player.height - 25) + player.y > this.y){
-
-        player.reset();
-        player.lives -=1;
-        this.resetSpeed();
-
-        let lives = document.querySelector('.lives');
-        lives.textContent = "Lives: " + player.lives;
-    }
-}
 
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
 var Player = function(x,y){
+    Enemy.call(this,x,y,80);
     this.sprite = 'images/char-boy.png';
-    this.x = x;
-    this.y = y;
-    this.width = 80;
     this.height = 80;
     this.lives = 5;
     this.score = 0;
-
 };
 
 Player.prototype.update = function(dt){
+    this.checkCollision();
     if(this.y <= 0){
         this.score += 1;
         let scores = document.querySelector('.scores');
@@ -86,6 +68,25 @@ Player.prototype.update = function(dt){
         }
     
 };
+
+// Function to check collision of the bugs and player
+Player.prototype.checkCollision = function(){
+    for(let i=0;i<allEnemies.length;i++){
+        if(this.x < allEnemies[i].x + allEnemies[i].width &&
+            this.x + this.width > allEnemies[i].x &&
+            this.y < allEnemies[i].y + allEnemies[i].height &&
+            (this.height - 25) + this.y > allEnemies[i].y){
+
+            player.reset();
+            player.lives -=1;
+            Enemy.prototype.resetSpeed();
+
+            let lives = document.querySelector('.lives');
+            lives.textContent = "Lives: " + player.lives;
+        }
+    }
+}
+
 
 Player.prototype.render = function(){
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
